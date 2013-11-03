@@ -18,6 +18,7 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import static func.utility.General.invoke;
 
@@ -27,10 +28,17 @@ public class XMLWrite {
     public static Node valueToNode(Object obj,
                                    Class<?> cl,
                                    Document document) {
-        Node node = document.createElement(cl.getName());
+        Node node;
         if (obj == null) {
+            node = document.createElement(cl.getName());
             node.appendChild(document.createTextNode(NULL));
         } else if (obj instanceof Collection) {
+            if (obj instanceof Set) {
+                node = document.createElement("org.pcollections.PSet");
+//            } else if (obj instanceof List) {
+            } else {
+                node = document.createElement("org.pcollections.PVector");
+            }
             Collection coll = (Collection) obj;
             for (Object o : coll) {
                 node.appendChild(
@@ -47,6 +55,7 @@ public class XMLWrite {
 //                    } else {
 //                    }
         } else if (obj instanceof Map) {
+            node = document.createElement("org.pcollections.PMap");
             Map<?,?> map = (Map<?,?>) obj;
             for (Map.Entry entry : map.entrySet()) {
                 Object key = entry.getKey();
@@ -64,8 +73,10 @@ public class XMLWrite {
             }
 
         } else if (Utility.isBasicType(cl)) {
+            node = document.createElement(cl.getName());
             node.appendChild(document.createTextNode(obj.toString()));
         } else {
+            node = document.createElement(cl.getName());
             NamedNodeMap attributes = node.getAttributes();
             for (Method getter : Refl.findGetters(cl)) {
                 Object returnedValue = invoke(obj, getter);
