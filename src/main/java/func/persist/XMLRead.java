@@ -170,4 +170,22 @@ public class XMLRead {
     public static Object xmlStringToValue(String s) throws IOException, SAXException, ClassNotFoundException {
         return xmlStreamToValue(new ByteArrayInputStream(s.getBytes()));
     }
+
+    public static <T> PCollection<T> verifyCollection(Object object,
+                                                      Class<T> cl) throws IOException,
+                                                                          SAXException,
+                                                                          ClassNotFoundException {
+                if (object instanceof PCollection) {
+                    PCollection coll = (PCollection) object;
+                    for (Object o : coll) {
+                        if (! (cl.isInstance(o))) {
+                            return null;
+                        }
+                    }
+                } else {
+                    return null;
+                }
+                return (PCollection<T>) object;
+     }
+
 }

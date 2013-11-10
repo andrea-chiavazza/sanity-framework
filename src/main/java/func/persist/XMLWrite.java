@@ -23,7 +23,8 @@ import java.util.Set;
 import static func.utility.General.invoke;
 
 public class XMLWrite {
-    private static final String NULL = String.valueOf((Object) null); // string used to represent a null value
+    // string used to represent a null value
+    private static final String NULL = String.valueOf((Object) null);
 
     public static Node valueToNode(Object obj,
                                    Class<?> cl,
@@ -186,5 +187,6 @@ public class XMLWrite {
         assertObjectNotNull(obj);
         return valueToXMLString(obj, obj.getClass());
     }
+
 
 }
