@@ -1,6 +1,7 @@
 package func.utility.swing;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 
 public abstract class GuiValue {
     private final JLabel label = new JLabel();
@@ -17,8 +18,14 @@ public abstract class GuiValue {
         return label;
     }
 
+    public abstract void addChangeListener(ChangeListener changeListener);
+
+    public abstract void removeChangeListener(ChangeListener changeListener);
+
     public abstract JComponent getInputWidget();
 
     public abstract Object getValue();
+
+    public abstract void clearValue();
 
 }

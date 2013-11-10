@@ -20,7 +20,7 @@ public class GuiDecimalValue extends GuiTextValue {
     }
 
     public void setValue(Number o) {
-        value = o == null ? null : new BigDecimal(o.toString());
+        value = (o == null ? null : new BigDecimal(o.toString()));
         getInputWidget().setText(format());
     }
 
@@ -31,7 +31,7 @@ public class GuiDecimalValue extends GuiTextValue {
         } else if (labelText.equals("")) {
             return null;
         } else {
-            setValue(new BigDecimal(labelText));
+            value = (new BigDecimal(labelText));
         }
         return value;
     }

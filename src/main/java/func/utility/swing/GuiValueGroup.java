@@ -4,62 +4,71 @@ import org.pcollections.PVector;
 import org.pcollections.TreePVector;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GuiValueGroup {
-    private final PVector<? extends GuiValue> guiValues;
-    private final JPanel panel;
+public abstract class GuiValueGroup<T> {
+    private PVector<? extends GuiValue> guiValues;
+    private JPanel panel;
 
-    public GuiValueGroup(GuiValue... guiValues) {
-        panel = new JPanel(new GridBagLayout());
-        this.guiValues = TreePVector.from(Arrays.asList(guiValues));
-        GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.LINE_START;
-        c.insets = new Insets(0, 3, 0, 3);
-        c.gridy = 0;
-        for (GuiValue guiValue : this.guiValues) {
-            c.gridx = 0;
-            panel.add(guiValue.getLabel(), c);
-            c.gridx = 1;
-            panel.add(guiValue.getInputWidget(), c);
-            c.gridy++;
+    public abstract List<? extends GuiValue> getGuiValues();
+
+    public abstract T getValue();
+
+    public abstract void setValue(T t);
+
+    private final List<ChangeListener> changeListeners = new ArrayList<>();
+
+    //todo: use EventListenerList ?
+    private ChangeEvent changeEvent = null;
+
+    public void clearAllValues() {
+        for (GuiValue guiValue : guiValues) {
+            guiValue.clearValue();
         }
     }
 
-//    public GuiValueGroup(String... labels) {
-//        this(
-//            MapFunc.map(
-//                new F1<String,GuiValue>() {
-//                    public GuiValue execute(String label) {
-//                        return new GuiValue(label);
-//                    }
-//                },
-//                labels).toArray(new GuiValue[labels.length]);
-//    }
-
-//    public void setValues(List<?> values) {
-//        if (values.size() != fields.size()) {
-//            throw new IllegalArgumentException("Wrong number of values.");
-//        }
-//        for (int i = 0; i < fields.size(); i++) {
-//            fields.get(i).setValue(values.get(i));
-//        }
-//    }
-//
-//    public PVector<?> getValues() {
-//        return TreePVector.from(
-//            MapFunc.map(
-//                new F1<GuiDecimalValue,Object>() {
-//                    public Object execute(GuiDecimalValue guiDecimalValue) {
-//                        return guiDecimalValue.getValue();
-//                    }
-//                },
-//                fields));
-//    }
-
     public JComponent getComponent() {
+        if (panel == null) {
+            guiValues = TreePVector.from(getGuiValues());
+            panel = new JPanel(new GridBagLayout());
+            GridBagConstraints c = new GridBagConstraints();
+            c.anchor = GridBagConstraints.LINE_START;
+            c.insets = new Insets(0, 3, 0, 3);
+            c.gridy = 0;
+            for (GuiValue guiValue : this.guiValues) {
+                c.gridx = 0;
+                panel.add(guiValue.getLabel(), c);
+                c.gridx = 1;
+                panel.add(guiValue.getInputWidget(), c);
+                c.gridy++;
+            }
+        }
+        ChangeListener changeListener = new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                if (changeEvent == null) {
+                    changeEvent = new ChangeEvent(GuiValueGroup.this);
+                }
+                for (ChangeListener changeListener : changeListeners) {
+                    changeListener.stateChanged(changeEvent);
+                }
+            }
+        };
+        for (GuiValue guiValue : guiValues) {
+            guiValue.addChangeListener(changeListener);
+        }
         return panel;
+    }
+
+    public void addChangeListener(final ChangeListener changeListener) {
+        changeListeners.add(changeListener);
+    }
+
+    public void removeChangeListener(ChangeListener changeListener) {
+        changeListeners.remove(changeListener);
     }
 
 }
