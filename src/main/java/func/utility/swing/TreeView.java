@@ -1,5 +1,7 @@
 package func.utility.swing;
 
+import func.basic.F1;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -13,7 +15,7 @@ public class TreeView {
     private final JTree tree = new JTree();
 
     public TreeView() {
-        this(new func.utility.swing.TreeEntity("root"));
+        this(new TreeEntity(null, "root"));
     }
 
     public TreeView(func.utility.swing.TreeEntity root) {
@@ -46,7 +48,14 @@ public class TreeView {
                         if (clickedRow != -1) {
                             Object node = tree.getPathForLocation(x, y).getLastPathComponent();
                             if (node instanceof func.utility.swing.TreeEntity) {
-                                List<? extends Action> menuActions = ((func.utility.swing.TreeEntity) node).getMenuEntities();
+                                TreeEntity treeEntity = (TreeEntity) node;
+                                F1<Void,List<? extends Action>> popupMenuMaker = treeEntity.getMenuActionsMaker();
+                                List<? extends Action> menuActions;
+                                if (popupMenuMaker != null) {
+                                    menuActions = popupMenuMaker.execute(null);
+                                } else {
+                                    menuActions = treeEntity.getMenuActions();
+                                }
                                 if (!menuActions.isEmpty()) {
                                     JPopupMenu popup = new JPopupMenu();
                                     for (Action action : menuActions) {
@@ -96,6 +105,12 @@ public class TreeView {
                 }
             }
         );
+    }
+
+    public static abstract class MenuAction extends AbstractAction {
+        public MenuAction(String name) {
+            super(name);
+        }
     }
 
     public func.utility.swing.TreeEntity getRoot() {

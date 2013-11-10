@@ -9,7 +9,7 @@ public class TestTreeView {
         SwingUtilities.invokeLater(
             new Runnable() {
                 public void run() {
-                    final TreeEntity root = new TreeEntity("rootA");
+                    final TreeEntity root = new TreeEntity(2, "rootA");
                     TreeView treeView = new TreeView(root);
 
                     root.setWhenSelected(
