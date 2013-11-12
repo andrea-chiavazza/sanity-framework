@@ -31,7 +31,11 @@ public class GuiDecimalValue extends GuiTextValue {
         } else if (labelText.equals("")) {
             return null;
         } else {
-            value = (new BigDecimal(labelText));
+            try {
+                value = new BigDecimal(labelText);
+            } catch (NumberFormatException e) {
+                value = null;
+            }
         }
         return value;
     }

@@ -12,7 +12,10 @@ import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TreeViewPanel {
     private final TreeView treeView;
@@ -29,8 +32,9 @@ public class TreeViewPanel {
                                 final PSet<T> set,
                                 final String nameGetterName,
                                 final Class<T> cl,
+                                final F1<PSet<T>,Void> whenParentSelected,
                                 final F1<T,Void> whenSelected,
-                                final F1<T,Void> whenRemoved)
+                                final F1<T,List<? extends Action>> makeMenu)
                                     throws NoSuchMethodException,
                                            InvocationTargetException,
                                            IllegalAccessException {
@@ -51,9 +55,12 @@ public class TreeViewPanel {
                                                         General.promptAndLoadCollection(frame, cl)),
                                                     nameGetterName,
                                                     cl,
+                                                    whenParentSelected,
                                                     whenSelected,
-                                                    whenRemoved);
-                                    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e1) {
+                                                    makeMenu);
+                                    } catch (NoSuchMethodException |
+                                             InvocationTargetException |
+                                             IllegalAccessException e1) {
                                         throw new RuntimeException(e1);
                                     }
                                 }
@@ -74,7 +81,7 @@ public class TreeViewPanel {
             treeEntity.setWhenSelected(
                 new Runnable() {
                     public void run() {
-                        //todo:
+                        whenParentSelected.execute(set);
                     }
                 }
             );
@@ -96,25 +103,13 @@ public class TreeViewPanel {
                     }
                 }
             );
-            child.setMenuActions(
-                Arrays.asList(
-                    new TreeView.MenuAction("Remove") {
-                        public void actionPerformed(ActionEvent e) {
-                            try {
-                                setEntities(name, set.minus(t), nameGetterName, cl, whenSelected, whenRemoved);
-                                whenRemoved.execute(t);
-                            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e1) {
-                                throw new RuntimeException(e1);
-                            }
-                        }
-                    }
-                )
-            );
+            child.setMenuActions(makeMenu.execute(t));
         }
         ((DefaultTreeModel) this.treeView.getComponent().getModel()).reload();
-        treeView.getComponent().expandPath(new TreePath(treeEntity.getPath()));
+        for (TreeEntity t : sets.values()) {
+            treeView.getComponent().expandPath(new TreePath(t.getPath()));
+        }
     }
-
 
     public <T> OrderedPSet<T> getEntities(String name) {
         return OrderedPSet.from(
@@ -129,7 +124,20 @@ public class TreeViewPanel {
         }
     }
 
-
+    public void removeEntity(String entitiesName,
+                             Object entity) {
+        if (sets.containsKey(entitiesName)) {
+            TreeEntity treeEntity = sets.get(entitiesName);
+            List<Object> treeNodeUserObjects = General.getTreeNodeUserObjects(treeEntity);
+            treeEntity.remove(treeNodeUserObjects.indexOf(entity));
+            Object userObject = treeEntity.getUserObject();
+            if (userObject instanceof PSet) {
+                treeEntity.setUserObject(((PSet) userObject).minus(entity));
+            }
+            ((DefaultTreeModel) this.treeView.getComponent().getModel()).reload(treeEntity);
+            treeView.getComponent().expandPath(new TreePath(treeEntity.getPath()));
+        }
+    }
 
     public void selectObject(Object object) {
         for (String name : sets.keySet()) {

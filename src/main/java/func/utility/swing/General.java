@@ -7,6 +7,7 @@ import org.pcollections.PSet;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import java.io.*;
 import java.util.ArrayList;
@@ -30,11 +31,19 @@ public class General {
 
     public static List<? extends TreeNode> getTreeNodeChildren(TreeNode tree) {
         Enumeration childrenEnumeration = tree.children();
-        List<TreeNode> children = new ArrayList<TreeNode>();
+        List<TreeNode> children = new ArrayList<>();
         while (childrenEnumeration.hasMoreElements()) {
             children.add((TreeNode) childrenEnumeration.nextElement());
         }
         return children;
+    }
+
+    public static <T> List<T> getTreeNodeUserObjects(DefaultMutableTreeNode treeNode) {
+        List<T> list = new ArrayList<>();
+        for (TreeNode node : getTreeNodeChildren(treeNode)) {
+            list.add((T) ((DefaultMutableTreeNode) node).getUserObject());
+        }
+        return list;
     }
 
     public static FileInputStream promptForFile(JFrame frame) {
