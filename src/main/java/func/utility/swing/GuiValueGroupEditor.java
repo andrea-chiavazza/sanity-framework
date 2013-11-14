@@ -33,7 +33,6 @@ public abstract class GuiValueGroupEditor<T> extends GuiValueGroup<T> {
                         previousValue = newValue;
                     }
                 });
-            saveButton.setEnabled(false);
             bottomPanel.add(saveButton);
             bottomPanel.add(Box.createRigidArea(new Dimension(GAP, 0)));
 
@@ -92,7 +91,6 @@ public abstract class GuiValueGroupEditor<T> extends GuiValueGroup<T> {
             bottomPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
             bottomPanel.setMinimumSize(bottomPanel.getPreferredSize());
             panel.add(bottomPanel);
-//            panel.setMinimumSize(panel.getPreferredSize());
             panel.add(Box.createVerticalGlue());
         }
         return panel;

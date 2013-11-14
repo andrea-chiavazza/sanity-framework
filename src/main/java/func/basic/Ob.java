@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Provides a sane implementation of equals(), hashCode() and toString() for
+ * immutable classes.
+ */
 public abstract class Ob {
     private static final Map<Class,List<Field>> clToFields = new ConcurrentHashMap<>();
 

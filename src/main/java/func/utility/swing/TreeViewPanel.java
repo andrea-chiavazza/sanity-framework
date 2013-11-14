@@ -2,6 +2,7 @@ package func.utility.swing;
 
 import func.basic.F1;
 import org.pcollections.OrderedPSet;
+import org.pcollections.PCollection;
 import org.pcollections.PSet;
 
 import javax.swing.*;
@@ -17,6 +18,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Stores sets of data objects divided in groups.
+ */
 public class TreeViewPanel {
     private final TreeView treeView;
     private final Map<String,TreeEntity> sets = new LinkedHashMap<>();
@@ -50,14 +54,16 @@ public class TreeViewPanel {
                             new TreeView.MenuAction("Load") {
                                 public void actionPerformed(ActionEvent e) {
                                     try {
-                                        setEntities(name,
-                                                    OrderedPSet.from(
-                                                        General.promptAndLoadCollection(frame, cl)),
-                                                    nameGetterName,
-                                                    cl,
-                                                    whenParentSelected,
-                                                    whenSelected,
-                                                    makeMenu);
+                                        PCollection<T> coll = General.promptAndLoadCollection(frame, cl);
+                                        if (coll != null) {
+                                            setEntities(name,
+                                                        OrderedPSet.from(coll),
+                                                        nameGetterName,
+                                                        cl,
+                                                        whenParentSelected,
+                                                        whenSelected,
+                                                        makeMenu);
+                                        }
                                     } catch (NoSuchMethodException |
                                              InvocationTargetException |
                                              IllegalAccessException e1) {
@@ -66,7 +72,7 @@ public class TreeViewPanel {
                                 }
                             }
                         );
-                        if (((PSet) treeEntity.getUserObject()).isEmpty()) {
+                        if (! ((PSet) treeEntity.getUserObject()).isEmpty()) {
                             menuActions.add(
                                 new TreeView.MenuAction("Save") {
                                     public void actionPerformed(ActionEvent e) {

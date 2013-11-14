@@ -11,9 +11,9 @@ import java.util.List;
 public abstract class GuiTextValue extends GuiValue {
     private final JTextField textField = new JTextField();
 
+    //todo: use EventListenerList ?
     private final List<ChangeListener> changeListeners = new ArrayList<>();
 
-    //todo: use EventListenerList ?
     private ChangeEvent changeEvent = null;
 
     public GuiTextValue(String labelText) {

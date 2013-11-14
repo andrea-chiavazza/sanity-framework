@@ -20,12 +20,13 @@ public abstract class GuiValueGroup<T> {
 
     public abstract void setValue(T t);
 
+    //todo: use EventListenerList ?
     private final List<ChangeListener> changeListeners = new ArrayList<>();
 
-    //todo: use EventListenerList ?
     private ChangeEvent changeEvent = null;
 
     public void clearAllValues() {
+        getComponent();
         for (GuiValue guiValue : guiValues) {
             guiValue.clearValue();
         }
@@ -39,7 +40,7 @@ public abstract class GuiValueGroup<T> {
             c.anchor = GridBagConstraints.LINE_START;
             c.insets = new Insets(0, 3, 0, 3);
             c.gridy = 0;
-            for (GuiValue guiValue : this.guiValues) {
+            for (GuiValue guiValue : guiValues) {
                 c.gridx = 0;
                 panel.add(guiValue.getLabel(), c);
                 c.gridx = 1;

@@ -14,6 +14,10 @@ public abstract class GuiValue {
         label.setText(text);
     }
 
+    public String getLabelText() {
+        return label.getText();
+    }
+
     public JLabel getLabel() {
         return label;
     }
@@ -25,6 +29,21 @@ public abstract class GuiValue {
     public abstract JComponent getInputWidget();
 
     public abstract Object getValue();
+
+    /** This is mainly useful to test the gui.
+     *  The argument must be of the right type.
+     *  Example String for JTextWidgets and Boolean for JCheckBox.
+     */
+    public void setValue(Object object) {
+        JComponent inputWidget = getInputWidget();
+        if (inputWidget instanceof JTextField) {
+            ((JTextField) inputWidget).setText((String) object);
+        } else if (inputWidget instanceof JCheckBox) {
+            inputWidget.setEnabled((Boolean) object);
+        } else {
+            throw new RuntimeException("Implement me");
+        }
+    }
 
     public abstract void clearValue();
 
