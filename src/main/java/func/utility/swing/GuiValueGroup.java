@@ -72,4 +72,16 @@ public abstract class GuiValueGroup<T> {
         changeListeners.remove(changeListener);
     }
 
+    /** Useful for testing. */
+    public void setField(String label,
+                         Object value) {
+        getComponent();
+        List<? extends GuiValue> values = getGuiValues();
+        for (GuiValue guiValue : values) {
+            if (guiValue.getLabelText().equals(label)) {
+                guiValue.setValue(value);
+            }
+        }
+    }
+
 }
