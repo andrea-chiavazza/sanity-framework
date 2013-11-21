@@ -143,11 +143,15 @@ public class XMLRead {
                         }
                     } else { // the value is not among the attributes
                         //todo: remove repetition
-                        while (childNodes.item(childCounter).getNodeType() != Node.ELEMENT_NODE) {
+                        while (childCounter < childNodes.getLength() &&
+                                childNodes.item(childCounter).getNodeType() != Node.ELEMENT_NODE) {
                             childCounter++;
                         }
-                        values.add(nodeToValue(childNodes.item(childCounter)));
-                        childCounter++;
+                        if (childCounter < childNodes.getLength() &&
+                                childNodes.item(childCounter).getNodeType() != Node.ELEMENT_NODE) {
+                            values.add(nodeToValue(childNodes.item(childCounter)));
+                            childCounter++;
+                        }
                     }
                 }
                 return Refl.instantiate(Refl.findConstructor(cl), values.toArray());
