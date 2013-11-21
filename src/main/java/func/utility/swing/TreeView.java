@@ -9,7 +9,6 @@ import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
 public class TreeView {
     private final JTree tree = new JTree();
@@ -49,16 +48,16 @@ public class TreeView {
                             Object node = tree.getPathForLocation(x, y).getLastPathComponent();
                             if (node instanceof func.utility.swing.TreeEntity) {
                                 TreeEntity treeEntity = (TreeEntity) node;
-                                F1<Void,List<? extends Action>> popupMenuMaker = treeEntity.getMenuActionsMaker();
-                                List<? extends Action> menuActions;
+                                F1<TreeEntity,MenuActionMap> popupMenuMaker = treeEntity.getMenuActionsMaker();
+                                MenuActionMap menuActions;
                                 if (popupMenuMaker != null) {
-                                    menuActions = popupMenuMaker.execute(null);
+                                    menuActions = popupMenuMaker.execute(treeEntity);
                                 } else {
                                     menuActions = treeEntity.getMenuActions();
                                 }
                                 if (!menuActions.isEmpty()) {
                                     JPopupMenu popup = new JPopupMenu();
-                                    for (Action action : menuActions) {
+                                    for (Action action : menuActions.values()) {
                                         popup.add(action);
                                     }
                                     popup.show(tree, x, y);
@@ -110,6 +109,15 @@ public class TreeView {
     public static abstract class MenuAction extends AbstractAction {
         public MenuAction(String name) {
             super(name);
+        }
+
+        public int hashCode() {
+            return getValue(Action.NAME).hashCode();
+        }
+
+        public boolean equals(Object obj) {
+            return obj instanceof MenuAction &&
+            ((MenuAction) obj).getValue(Action.NAME).equals(this.getValue(Action.NAME));
         }
     }
 

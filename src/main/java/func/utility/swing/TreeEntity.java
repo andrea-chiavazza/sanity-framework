@@ -2,10 +2,7 @@ package func.utility.swing;
 
 import func.basic.F1;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import java.util.Collections;
-import java.util.List;
 
 public class TreeEntity extends DefaultMutableTreeNode {
     private String name;
@@ -14,8 +11,8 @@ public class TreeEntity extends DefaultMutableTreeNode {
     private Runnable whenCollapsed;
     private Runnable beforeWillExpand;
     private Runnable beforeWillCollapse;
-    private List<? extends Action> menuActions = Collections.emptyList();
-    private F1<Void,List<? extends Action>> popupEntriesMaker;
+    private MenuActionMap menuActions;
+    private F1<TreeEntity,MenuActionMap> popupEntriesMaker;
 
     public TreeEntity(Object object,
                       String name) {
@@ -36,19 +33,19 @@ public class TreeEntity extends DefaultMutableTreeNode {
         this.name = name;
     }
 
-    public void setMenuActions(List<? extends Action> menuActions) {
+    public void setMenuActions(MenuActionMap menuActions) {
         this.menuActions = menuActions;
     }
 
-    public void setMenuActionsMaker(F1<Void,List<? extends Action>> popupEntriesMaker) {
+    public void setMenuActionsMaker(F1<TreeEntity,MenuActionMap> popupEntriesMaker) {
         this.popupEntriesMaker = popupEntriesMaker;
     }
 
-    public F1<Void,List<? extends Action>> getMenuActionsMaker() {
+    public F1<TreeEntity,MenuActionMap> getMenuActionsMaker() {
         return popupEntriesMaker;
     }
 
-    public List<? extends Action> getMenuActions() {
+    public MenuActionMap getMenuActions() {
         return menuActions;
     }
 

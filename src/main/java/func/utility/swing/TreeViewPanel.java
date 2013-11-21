@@ -1,8 +1,9 @@
 package func.utility.swing;
 
 import func.basic.F1;
+import org.pcollections.Empty;
 import org.pcollections.OrderedPSet;
-import org.pcollections.PCollection;
+import org.pcollections.POrderedSet;
 import org.pcollections.PSet;
 
 import javax.swing.*;
@@ -10,10 +11,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
-import java.awt.event.ActionEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,27 +31,37 @@ public class TreeViewPanel {
         this.frame = frame;
     }
 
+    public void runMenuAction(String name,
+                              String action) {
+        sets.get(name).getMenuActions().get(action).actionPerformed(null);
+    }
+
     public <T> void setEntities(final String name,
                                 final PSet<T> set,
                                 final String nameGetterName,
                                 final Class<T> cl,
                                 final F1<PSet<T>,Void> whenParentSelected,
                                 final F1<T,Void> whenSelected,
-                                final F1<T,List<? extends Action>> makeMenu)
+                                final F1<TreeEntity,MenuActionMap> makeParentMenu,
+                                final F1<T,MenuActionMap> makeMenu)
                                     throws NoSuchMethodException,
                                            InvocationTargetException,
                                            IllegalAccessException {
         if (! sets.containsKey(name)) {
             sets.put(name, new TreeEntity(set, name));
+            // close if here ???
             final TreeEntity treeEntity = sets.get(name);
 
+            treeEntity.setMenuActionsMaker(makeParentMenu);
+            /*
             treeEntity.setMenuActionsMaker(
-                new F1<Void,List<? extends Action>>() {
-                    public List<? extends Action> execute(Void aVoid) {
-                        List<Action> menuActions = new ArrayList<>();
-                        menuActions.add(
-                            new TreeView.MenuAction("Load") {
-                                public void actionPerformed(ActionEvent e) {
+                new F1<Void,MenuActionMap>() {
+                    public MenuActionMap execute(Void aVoid) {
+                        MenuActionMap menuActions = new MenuActionMap();
+                        menuActions.put(
+                            "Load",
+                            new AbstractAction() {
+                                public void actionPerformed(ActionEvent ignored) {
                                     try {
                                         PCollection<T> coll = General.promptAndLoadCollection(frame, cl);
                                         if (coll != null) {
@@ -62,21 +71,25 @@ public class TreeViewPanel {
                                                         cl,
                                                         whenParentSelected,
                                                         whenSelected,
+                                                        makeParentMenu,
                                                         makeMenu);
                                         }
                                     } catch (NoSuchMethodException |
-                                             InvocationTargetException |
-                                             IllegalAccessException e1) {
+                                        InvocationTargetException |
+                                        IllegalAccessException e1) {
                                         throw new RuntimeException(e1);
                                     }
                                 }
                             }
                         );
                         if (! ((PSet) treeEntity.getUserObject()).isEmpty()) {
-                            menuActions.add(
-                                new TreeView.MenuAction("Save") {
+                            menuActions.put(
+                                "Save",
+                                new AbstractAction() {
                                     public void actionPerformed(ActionEvent e) {
-                                        General.promptAndSaveCollection(frame, set);
+                                        General.promptAndSaveCollection(
+                                            frame,
+                                            getEntities(name));
                                     }
                                 }
                             );
@@ -84,6 +97,7 @@ public class TreeViewPanel {
                         return menuActions;
                     }
                 });
+                */
             treeEntity.setWhenSelected(
                 new Runnable() {
                     public void run() {
@@ -117,9 +131,10 @@ public class TreeViewPanel {
         }
     }
 
-    public <T> OrderedPSet<T> getEntities(String name) {
-        return OrderedPSet.from(
-            General.<T>getTreeNodeUserObjects(sets.get(name)));
+    public <T> POrderedSet<T> getEntities(String name) {
+        return sets.containsKey(name) ?
+            OrderedPSet.from(General.<T>getTreeNodeUserObjects(sets.get(name))) :
+            Empty.<T>orderedSet();
     }
 
     public void removeEntities(String name) {
