@@ -18,7 +18,6 @@ public abstract class GuiTextValue extends GuiValue {
 
     public GuiTextValue(String labelText) {
         super(labelText);
-        textField.setColumns(10);
         textField.getDocument().addDocumentListener(
             new DocumentListener() {
                 public void insertUpdate(DocumentEvent e) {
@@ -42,6 +41,7 @@ public abstract class GuiTextValue extends GuiValue {
 
     public void setValue(String text) {
         textField.setText(text);
+        textField.setCaretPosition(0);
     }
 
     public void addChangeListener(final ChangeListener changeListener) {

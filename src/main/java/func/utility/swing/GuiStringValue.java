@@ -11,7 +11,7 @@ public class GuiStringValue extends GuiTextValue {
     }
 
     public void setValue(String text) {
-        getInputWidget().setText(text);
+        super.setValue(text);
     }
 
 }

@@ -15,29 +15,36 @@ public class GuiDecimalValue extends GuiTextValue {
         format.setMaximumFractionDigits(fractionDigits);
     }
 
+    private String format(BigDecimal value) {
+        try {
+            return format.format(value);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     public String format() {
-        return format.format(value);
+        return format(value);
     }
 
     public void setValue(Number o) {
         value = (o == null ? null : new BigDecimal(o.toString()));
-        getInputWidget().setText(format());
+        super.setValue(format());
     }
 
     public BigDecimal getValue() {
-        String labelText = getInputWidget().getText();
-        if (labelText.equals(String.valueOf(value))) {
-            return value;
-        } else if (labelText.equals("")) {
+        String text = getInputWidget().getText();
+        if ("".equals(text)) {
             return null;
+        } else if (text.equals(format(value))) {
+            return value;
         } else {
             try {
-                value = new BigDecimal(labelText);
+                return new BigDecimal(text);
             } catch (NumberFormatException e) {
-                value = null;
+                return null;
             }
         }
-        return value;
     }
 
 }
