@@ -23,9 +23,13 @@ public class General {
     public static <E> POrderedSet<E> replaceInOrderedSet(POrderedSet<E> set,
                                                          E oldE,
                                                          E newE) {
-        int index = set.indexOf(oldE);
-        if (index > -1) {
-            return OrderedPSet.from(TreePVector.from(set).with(index, newE));
+        if (oldE != null) {
+            int index = set.indexOf(oldE);
+            if (index > -1) {
+                return OrderedPSet.from(TreePVector.from(set).with(index, newE));
+            } else {
+                return set;
+            }
         } else {
             return set;
         }
