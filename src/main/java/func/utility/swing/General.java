@@ -3,10 +3,10 @@ package func.utility.swing;
 import func.persist.XMLRead;
 import func.persist.XMLWrite;
 import org.pcollections.PCollection;
-import org.pcollections.PSet;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import java.io.*;
@@ -46,52 +46,72 @@ public class General {
         return list;
     }
 
-    public static FileInputStream promptForFile(JFrame frame) {
+    public static File promptForFileToOpen(JFrame frame) {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(
+            new FileFilter() {
+                public boolean accept(File f) {
+                    return f.getName().endsWith(".xml");
+                }
+
+                public String getDescription() {
+                    return "XML file";
+                }
+            });
+        if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            return selectedFile;
+        } else {
+            return null;
+        }
+    }
+
+    public static FileInputStream promptForFileISToOpen(JFrame frame) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(
+            new FileFilter() {
+                public boolean accept(File f) {
+                    return f.getName().endsWith(".xml");
+                }
+
+                public String getDescription() {
+                    return "XML file";
+                }
+            });
         if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             try {
                 return new FileInputStream(selectedFile);
             } catch (FileNotFoundException e) {
                 JOptionPane.showMessageDialog(
-                    frame, "File not found " + selectedFile.getName());
+                    frame, "Error opening file " + selectedFile.getName());
+                return null;
             }
+        } else {
+            return null;
         }
-        return null;
     }
 
     public static <T> PCollection<T> promptAndLoadCollection(JFrame frame,
                                                              Class<T> cl) {
-        JFileChooser fileChooser = new JFileChooser();
-        if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            try {
-                return loadCollection(new FileInputStream(selectedFile), cl);
-            } catch (IOException ignored) {
-            }
-            JOptionPane.showMessageDialog(
-                frame, "Error opening file " + selectedFile.getName());
+        FileInputStream fis = promptForFileISToOpen(frame);
+        if (fis != null) {
+            return loadCollection(fis, cl);
+        } else {
+            return null;
         }
-        return null;
     }
-
 
     public static <T> void promptAndSaveCollection(JFrame frame,
-                                                   PSet<T> set) {
-        saveCollection(frame, set);
-    }
-
-    public static <T> void saveCollection(JFrame frame,
-                                          Collection<T> coll) {
-        JFileChooser fileChooser = new JFileChooser();
-        if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            try {
+                                                   Collection<T> coll) {
+        File selectedFile = promptForFileToOpen(frame);
+        try {
+            if (selectedFile != null) {
                 XMLWrite.valueToXMLWriter(coll, new FileWriter(selectedFile));
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(frame,
-                                              "Error saving to file " + selectedFile.getName());
             }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(frame,
+                                          "Error saving to file " + selectedFile.getName());
         }
     }
 
