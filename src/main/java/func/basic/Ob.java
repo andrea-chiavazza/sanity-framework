@@ -2,6 +2,7 @@ package func.basic;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,17 @@ public abstract class Ob {
             int hash = 1;
             for (Field field : getFields(cl)) {
                 Object o = field.get(this);
-                hash = 31 * hash + (o == null ? 0 : o.hashCode());
+                int newHash;
+                if (o == null) {
+                    newHash = 0;
+                } else if (o instanceof BigDecimal) {
+                    // BigDecimal with different scales have different hash code even
+                    // if they represent the same value.
+                    newHash = new Double(((BigDecimal) o).doubleValue()).hashCode();
+                } else {
+                    newHash = o.hashCode();
+                }
+                hash = 31 * hash + newHash;
             }
             return hash;
         } catch (IllegalAccessException e) {
@@ -97,7 +108,16 @@ public abstract class Ob {
             try {
                 Object o = field.get(this);
                 Object that = field.get(obj);
-                if (o == null ? that != null : ! o.equals(that)) {
+                if (o == null && that != null) {
+                    return false;
+                }
+                // BigDecimal with different scales have different hash code even
+                // if they represent the same value.
+                if (o instanceof BigDecimal && that instanceof BigDecimal) {
+                    if (((BigDecimal) o).compareTo((BigDecimal) that) != 0) {
+                        return false;
+                    }
+                } else if (o != null && !o.equals(that)) {
                     return false;
                 }
             } catch (IllegalAccessException e) {
@@ -107,17 +127,26 @@ public abstract class Ob {
         return true;
     }
 
+    private String formatObject(Object obj) {
+        if (obj instanceof String) {
+            return "\"" + ((String) obj).replace("\"", "\\\"") + "\"";
+        } else {
+            return String.valueOf(obj);
+        }
+    }
+
     private String fieldsToString(Class cl) {
         try {
             StringBuilder sb = new StringBuilder();
             List<Field> fields = getFields(cl);
             if (!fields.isEmpty()) {
                 Field first = fields.get(0);
-                sb.append(first.getName()).append("=").append(first.get(this));
+                sb.append(first.getName()).append("=").append(formatObject(first.get(this)));
             }
             for (int i = 1, fieldsSize = fields.size(); i < fieldsSize; i++) {
                 Field field = fields.get(i);
-                sb.append(", ").append(field.getName()).append("=").append(field.get(this));
+                sb.append(", ").append(field.getName()).append("=").
+                    append(formatObject(field.get(this)));
             }
             return sb.toString();
         } catch (IllegalAccessException e) {
