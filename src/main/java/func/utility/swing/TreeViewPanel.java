@@ -146,23 +146,16 @@ public class TreeViewPanel {
             node = makeNode(name, name);
             getRoot().add(node);
         }
-//        if (!sets.containsKey(name)) {
-//            sets.put(name, makeNode(name, name));
-//            close if here ???
-//            getRoot().add(sets.get(name));
-//        }
-
-//        final DefaultMutableTreeNode treeEntity = sets.get(name);
         node.setUserObject(name);
         node.removeAllChildren();
         for (final T t : set) {
             final String s = t.getClass().getMethod(nameGetterName).invoke(t).toString();
-            final DefaultMutableTreeNode child = new DefaultMutableTreeNode(t) {
-                public String toString() {
-                    return s;
-                }
-            };
-            node.add(child);
+            node.add(
+                new DefaultMutableTreeNode(t) {
+                    public String toString() {
+                        return s;
+                    }
+                });
         }
         ((DefaultTreeModel) tree.getModel()).reload();
         for (TreeNode t : getTreeNodeChildren(getRoot())) {

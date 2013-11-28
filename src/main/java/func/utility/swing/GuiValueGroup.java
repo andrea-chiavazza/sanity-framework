@@ -54,7 +54,7 @@ public abstract class GuiValueGroup<T> {
 
     /** Each valueList will be displayed in a column.
      *  A null GuiValue can be used to have an empty cell. */
-    public static JPanel makePanel(List<? extends GuiValue>... valuesLists) {
+    public static JPanel makeGridPanel(List<? extends GuiValue>... valuesLists) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
