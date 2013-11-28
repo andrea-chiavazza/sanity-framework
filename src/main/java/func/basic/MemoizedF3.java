@@ -3,6 +3,7 @@ package func.basic;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/** See: http://en.wikipedia.org/wiki/Memoization */
 public class MemoizedF3<T,U,V,R> implements F3<T,U,V,R> {
     private final Map<V3,R> cache = new ConcurrentHashMap<>();
     private final F3<T,U,V,R> f3;

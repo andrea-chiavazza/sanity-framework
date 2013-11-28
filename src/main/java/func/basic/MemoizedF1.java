@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/** See: http://en.wikipedia.org/wiki/Memoization */
 public class MemoizedF1<T,R> implements F1<T,R> {
 
     private final Map<T,R> cache = Collections.synchronizedMap(new HashMap<T,R>());
