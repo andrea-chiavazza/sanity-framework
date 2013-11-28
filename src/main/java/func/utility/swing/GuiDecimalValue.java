@@ -1,23 +1,32 @@
 package func.utility.swing;
 
+import javax.swing.*;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class GuiDecimalValue extends GuiTextValue {
     private BigDecimal value;
-    private NumberFormat format;
+    private NumberFormat numberFormat;
 
     public GuiDecimalValue(String label,
                            int fractionDigits) {
         super(label);
-        format = DecimalFormat.getInstance();
-        format.setMaximumFractionDigits(fractionDigits);
+        numberFormat = DecimalFormat.getInstance();
+        numberFormat.setMaximumFractionDigits(fractionDigits);
+        JTextField inputWidget = getInputWidget();
+        inputWidget.setFont(new Font(Font.MONOSPACED,
+                                     Font.PLAIN,
+                                     inputWidget.getFont().getSize()));
     }
 
-    private String format(BigDecimal value) {
+    protected String format(BigDecimal value) {
         try {
-            return format.format(value);
+            if (value == null) {
+                return null;
+            }
+            return (value.signum() < 0 ? "" : " ") + numberFormat.format(value);
         } catch (IllegalArgumentException e) {
             return null;
         }

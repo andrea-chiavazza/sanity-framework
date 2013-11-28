@@ -34,12 +34,14 @@ public abstract class GuiValue {
      *  The argument must be of the right type.
      *  Example String for JTextWidgets and Boolean for JCheckBox.
      */
-    public void setValue(Object object) {
+    public void setValueInWidget(Object object) {
         JComponent inputWidget = getInputWidget();
         if (inputWidget instanceof JTextField) {
             ((JTextField) inputWidget).setText((String) object);
         } else if (inputWidget instanceof JCheckBox) {
             inputWidget.setEnabled((Boolean) object);
+        } else if (inputWidget instanceof JComboBox) {
+            ((JComboBox) inputWidget).setSelectedItem(object);
         } else {
             throw new RuntimeException("Implement me");
         }

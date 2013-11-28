@@ -1,14 +1,21 @@
 package func.utility.swing;
 
+import javax.swing.*;
+import java.awt.*;
+
 public class GuiIntegerValue extends GuiTextValue {
     private long value;
 
     public GuiIntegerValue(String label) {
         super(label);
+        JTextField inputWidget = getInputWidget();
+        inputWidget.setFont(new Font(Font.MONOSPACED,
+                                     Font.PLAIN,
+                                     inputWidget.getFont().getSize()));
     }
 
     public String format(long value) {
-        return Long.toString(value);
+        return (value < 0 ? "" : " ") + Long.toString(value);
     }
 
     public String format() {

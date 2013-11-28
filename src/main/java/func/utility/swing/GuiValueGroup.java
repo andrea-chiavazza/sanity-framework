@@ -124,7 +124,7 @@ public abstract class GuiValueGroup<T> {
                          Object value) {
         for (GuiValue guiValue : guiValues) {
             if (guiValue.getLabelText().equals(label)) {
-                guiValue.setValue(value);
+                guiValue.setValueInWidget(value);
             }
         }
     }
