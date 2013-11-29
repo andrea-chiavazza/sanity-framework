@@ -4,10 +4,10 @@ package func.utility.swing;
 import func.values.Composite;
 import func.values.Mixed;
 import org.pcollections.PVector;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static func.values.Values.*;
+import static org.testng.Assert.assertEquals;
 
 //todo: shouldn't test that the setValue.equals(getValue), but that X.parse(setValue.toString()).equals(getValue)
 
@@ -18,7 +18,7 @@ public class TestValueEditor {
         ValueEditor<Composite> valueEditor = new ValueEditor<>(Composite.class);
         for (Composite composite : new Composite[] {c1, c2, c3, c4}) {
             valueEditor.setValue(composite);
-            Assert.assertEquals(
+            assertEquals(
                 valueEditor.getValue(),
                 composite);
         }
@@ -27,9 +27,9 @@ public class TestValueEditor {
     @Test
     public void testSetValueVector() {
         ValueEditor<PVector> valueEditor = new ValueEditor<>(PVector.class);
-        for (PVector vector : new PVector[] {vi1, vi2, vi3, vi4, vc1, vc2, vc3, vs1, vs2, vs3}) {
+        for (PVector vector : new PVector[] {vc1, vc2, vc3}) {
             valueEditor.setValue(vector);
-            Assert.assertEquals(
+            assertEquals(
                 valueEditor.getValue(),
                 vector);
         }
@@ -40,7 +40,7 @@ public class TestValueEditor {
         ValueEditor<Mixed> valueEditor = new ValueEditor<>(Mixed.class);
         for (Mixed mixed : new Mixed[] {m1, m2}) {
             valueEditor.setValue(mixed);
-            Assert.assertEquals(
+            assertEquals(
                 valueEditor.getValue(),
                 mixed);
         }

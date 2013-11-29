@@ -46,14 +46,13 @@ public class ValueEditor<T> extends JPanel {
     public ValueEditor(final Class<T> cl,
                        final Class<?> elCl,
                        final Map<Object,Object> m) {
-        this(cl, elCl, null, m, true);
+        this(cl, elCl, null, m);
     }
 
     public ValueEditor(final Class<T> cl,
                        final Class<?> elCl,
                        final Class<?> keyCl,
-                       final Map<Object,Object> m,
-                       final boolean isEditable) {
+                       final Map<Object,Object> m) {
         this.cl = cl;
         this.elCl = elCl;
         this.keyCl = keyCl;
@@ -224,7 +223,7 @@ public class ValueEditor<T> extends JPanel {
                 //todo: the key must not be editable !!
                 c.gridx = 0;
                 //todo: null key ?
-                ValueEditor keyComponent = new ValueEditor<>(entry.getKey().getClass(), null, null, m, false);
+                ValueEditor keyComponent = new ValueEditor<>(entry.getKey().getClass(), null, null, m);
                 add(keyComponent, c);
                 keyComponent.setValue(entry.getKey());
 

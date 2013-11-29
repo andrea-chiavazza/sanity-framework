@@ -14,6 +14,13 @@ public class V2<T,U> extends Ob implements F2<T,U,V2> {
     }
 
     @Override
+    public String toString() {
+        return "V2[" +
+            Ob.formatObject(t) + ", " +
+            Ob.formatObject(u) + ']';
+    }
+
+    @Override
     public V2 execute(T t, U u) {
         return new V2<>(t, u);
     }

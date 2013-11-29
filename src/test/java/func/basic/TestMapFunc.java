@@ -49,74 +49,58 @@ public class TestMapFunc {
 
     @Test
     public void testMap1() throws Exception {
-        assertEquals(
-            Arrays.asList(36),
-            map(
-                mul9,
-                Arrays.asList(4)));
+        assertEquals(map(mul9,
+                         Arrays.asList(4)),
+                     Arrays.asList(36));
     }
 
     @Test
     public void testPmap1() throws Exception {
-        assertEquals(
-            Arrays.asList(36),
-            pmap(
-                mul9,
-                Arrays.asList(4)));
+        assertEquals(pmap(mul9,
+                          Arrays.asList(4)),
+                     Arrays.asList(36));
     }
 
     @Test
     public void testMap2() throws Exception {
-        assertEquals(
-            Arrays.asList(36, 99),
-            map(
-                mul9,
-                Arrays.asList(4, 11)));
+        assertEquals(map(mul9,
+                         Arrays.asList(4, 11)),
+                     Arrays.asList(36, 99));
     }
 
     @Test
     public void testPmap2() throws Exception {
-        assertEquals(
-            Arrays.asList(36, 99),
-            pmap(
-                mul9,
-                Arrays.asList(4, 11)));
+        assertEquals(pmap(mul9,
+                          Arrays.asList(4, 11)),
+                     Arrays.asList(36, 99));
     }
 
     @Test
     public void testMap4() throws Exception {
-        assertEquals(
-            Arrays.asList(9, 18, 27, 36),
-            map(
-                mul9,
-                Arrays.asList(1, 2, 3, 4)));
+        assertEquals(map(mul9,
+                         Arrays.asList(1, 2, 3, 4)),
+                     Arrays.asList(9, 18, 27, 36));
     }
 
     @Test
     public void testPmap4() throws Exception {
-        assertEquals(
-            Arrays.asList(9, 18, 27, 36),
-            pmap(
-                mul9,
-                Arrays.asList(1, 2, 3, 4)));
+        assertEquals(pmap(mul9,
+                          Arrays.asList(1, 2, 3, 4)),
+                     Arrays.asList(9, 18, 27, 36));
     }
 
     @Test
     public void testMap7() throws Exception {
-        assertEquals(
-            Arrays.asList(9, 18, 27, 36, 45, 54, 63),
-            map(
-                mul9,
-                Arrays.asList(1, 2, 3, 4, 5, 6, 7)));
+        assertEquals(map(mul9,
+                         Arrays.asList(1, 2, 3, 4, 5, 6, 7)),
+                     Arrays.asList(9, 18, 27, 36, 45, 54, 63));
     }
 
     @Test
     public void testPmap7() throws Exception {
-        assertEquals(
-            Arrays.asList(9, 18, 27, 36, 45, 54, 63),
-            pmap(
-                mul9,
-                Arrays.asList(1, 2, 3, 4, 5, 6, 7)));
+        assertEquals(pmap(mul9,
+                          Arrays.asList(1, 2, 3, 4, 5, 6, 7)),
+                     Arrays.asList(9, 18, 27, 36, 45, 54, 63));
     }
 
     @Test
@@ -141,9 +125,8 @@ public class TestMapFunc {
             coll2.add((double) i);
             expected2.add(fDouble.execute(coll2.get(i)));
         }
-        assertEquals(
-            expected2,
-            map(fDouble, coll2));
+        assertEquals(map(fDouble, coll2),
+                     expected2);
     }
 
     @Test
@@ -157,9 +140,8 @@ public class TestMapFunc {
             coll.add(i);
             expected.add(fInt.execute(coll.get(i)));
         }
-        assertEquals(
-            expected,
-            pmap(fInt, coll));
+        assertEquals(pmap(fInt, coll),
+                     expected);
 
         F1<Double,Double> fDouble = sin;
         List<Double> coll2 = new ArrayList<Double>(size);
@@ -168,31 +150,26 @@ public class TestMapFunc {
             coll2.add((double) i);
             expected2.add(fDouble.execute(coll2.get(i)));
         }
-        assertEquals(
-            expected2,
-            pmap(fDouble, coll2));
+        assertEquals(pmap(fDouble, coll2),
+                     expected2);
     }
 
     //////// arity 2
 
     @Test
     public void testMapArity2() {
-        assertEquals(
-            Arrays.asList(6, 13, 22, 33),
-            map(
-                prodPlus1,
-                Arrays.asList(1, 2, 3, 4, 55),
-                Arrays.asList(5, 6, 7, 8)));
+        assertEquals(map(prodPlus1,
+                         Arrays.asList(1, 2, 3, 4, 55),
+                         Arrays.asList(5, 6, 7, 8)),
+                     Arrays.asList(6, 13, 22, 33));
     }
 
     @Test
     public void testPmapArity2() {
-        assertEquals(
-            Arrays.asList(6, 13, 22, 33),
-            pmap(
-                prodPlus1,
-                Arrays.asList(1, 2, 3, 4, 55),
-                Arrays.asList(5, 6, 7, 8)));
+        assertEquals(pmap(prodPlus1,
+                          Arrays.asList(1, 2, 3, 4, 55),
+                          Arrays.asList(5, 6, 7, 8)),
+                     Arrays.asList(6, 13, 22, 33));
     }
 
     @Test
@@ -210,9 +187,8 @@ public class TestMapFunc {
             expected.add(f1.execute(coll1.get(i), coll2.get(i)));
         }
 
-        assertEquals(
-            expected,
-            map(f1, coll1, coll2));
+        assertEquals(map(f1, coll1, coll2),
+                     expected);
     }
 
     @Test
@@ -230,9 +206,8 @@ public class TestMapFunc {
             expected.add(f1.execute(coll1.get(i), coll2.get(i)));
         }
 
-        assertEquals(
-            expected,
-            pmap(f1, coll1, coll2));
+        assertEquals(pmap(f1, coll1, coll2),
+                     expected);
     }
 
 //    @Test

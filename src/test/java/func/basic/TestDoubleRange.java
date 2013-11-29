@@ -21,32 +21,32 @@ public class TestDoubleRange {
     @Test
     public void test() {
         for (int i = 0; i < 11; i++) {
-            assertEquals((double) i, (Object) range11.get(i));
+            assertEquals(range11.get(i), (double) i);
         }
     }
 
     @Test
     public void testSize() {
-        assertEquals(11, range11.size());
+        assertEquals(range11.size(), 11);
     }
 
     @Test
     public void testContains() {
-        assertFalse(range11.contains(-1));
+        assertFalse(range11.contains(-1.0));
         for (double i = 0.0; i < 11.0; i += 1.0) {
             assertTrue(range11.contains(i));
         }
-        assertFalse(range11.contains(11));
+        assertFalse(range11.contains(11.0));
     }
 
     @Test
     public void testIterate() {
         int expected = 0;
         for (double actual : range11) {
-            assertEquals(expected, actual, PRECISION);
+            assertEquals(actual, expected, PRECISION);
             expected++;
         }
-        assertEquals(11, expected);
+        assertEquals(expected, 11);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class TestDoubleRange {
         Iterator iterator = range11.iterator();
         for (double i = 0.0; i < 11.0; i++) {
             assertTrue(iterator.hasNext());
-            assertEquals(i, (Double) iterator.next(), PRECISION);
+            assertEquals((Double) iterator.next(), i, PRECISION);
         }
         assertFalse(iterator.hasNext());
     }
@@ -62,8 +62,8 @@ public class TestDoubleRange {
     @Test
     public void testSubList() {
         assertEquals(
-            Arrays.asList(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0),
-            range11.subList(0, 11));
+            range11.subList(0, 11),
+            Arrays.asList(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0));
     }
 
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
@@ -80,33 +80,33 @@ public class TestDoubleRange {
     public void testWithStart() {
         int index = 0;
         for (double i = 4; i < 11; i++) {
-            assertEquals(i, range4_11.get(index), PRECISION);
+            assertEquals(range4_11.get(index), i, PRECISION);
             index++;
         }
     }
 
     @Test
     public void testSizeWithStart() {
-        assertEquals(7, range4_11.size());
+        assertEquals(range4_11.size(), 7);
     }
 
     @Test
     public void testContainsWithStart() {
-        assertFalse(range4_11.contains(3));
+        assertFalse(range4_11.contains(3.0));
         for (double i = 4; i < 11; i++) {
             assertTrue(range4_11.contains(i));
         }
-        assertFalse(range4_11.contains(11));
+        assertFalse(range4_11.contains(11.0));
     }
 
     @Test
     public void testIterateWithStart() {
         int expected = 4;
         for (double actual : range4_11) {
-            assertEquals(expected, actual, PRECISION);
+            assertEquals(actual, expected, PRECISION);
             expected++;
         }
-        assertEquals(11, expected);
+        assertEquals(expected, 11);
     }
 
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
@@ -123,14 +123,14 @@ public class TestDoubleRange {
 
     @Test
     public void testWithStep() {
-        assertEquals(4.0, (Object) range4_11_3.get(0));
-        assertEquals(7.0, (Object) range4_11_3.get(1));
-        assertEquals(10.0, (Object) range4_11_3.get(2));
+        assertEquals(range4_11_3.get(0), 4.0);
+        assertEquals(range4_11_3.get(1), 7.0);
+        assertEquals(range4_11_3.get(2), 10.0);
     }
 
     @Test
     public void testSizeWithStep() {
-        assertEquals(3, (Object) range4_11_3.size());
+        assertEquals((Object) range4_11_3.size(), 3);
     }
 
     @Test
@@ -146,10 +146,10 @@ public class TestDoubleRange {
     public void testIterateWithStep() {
         int expected = 4;
         for (double actual : range4_11_3) {
-            assertEquals(expected, actual, PRECISION);
+            assertEquals(actual, expected, PRECISION);
             expected += 3;
         }
-        assertEquals(13, expected);
+        assertEquals(expected, 13);
     }
 
     @Test
@@ -157,7 +157,7 @@ public class TestDoubleRange {
         Iterator iterator = range4_11_3.iterator();
         for (double i = 4; i < 11; i += 3) {
             assertTrue(iterator.hasNext());
-            assertEquals(i, (Double) iterator.next(), PRECISION);
+            assertEquals((Double) iterator.next(), i, PRECISION);
         }
         assertFalse(iterator.hasNext());
     }
@@ -174,14 +174,11 @@ public class TestDoubleRange {
 
     @Test
     public void testToString() {
-        assertEquals(
-            "[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]",
-            range11.toString());
-        assertEquals(
-            "[0.0, 1.0, 2.0, 3.0, ..., 11.0, 12.0, 13.0, 14.0]",
-            new DoubleRange(15).toString());
-        assertEquals(
-            "[0.0, 6.0, 12.0, 18.0, 24.0, 30.0, 36.0, 42.0, 48.0]",
-            new DoubleRange(0, 50, 6).toString());
+        assertEquals(range11.toString(),
+                     "[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]");
+        assertEquals(new DoubleRange(15).toString(),
+                     "[0.0, 1.0, 2.0, 3.0, ..., 11.0, 12.0, 13.0, 14.0]");
+        assertEquals(new DoubleRange(0, 50, 6).toString(),
+                     "[0.0, 6.0, 12.0, 18.0, 24.0, 30.0, 36.0, 42.0, 48.0]");
     }
 }

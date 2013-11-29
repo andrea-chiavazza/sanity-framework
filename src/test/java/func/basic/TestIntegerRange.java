@@ -20,13 +20,13 @@ public class TestIntegerRange {
     @Test
     public void test() {
         for (int i = 0; i < 11; i++) {
-            assertEquals(i, (Object) range11.get(i));
+            assertEquals((Object) range11.get(i), i);
         }
     }
 
     @Test
     public void testSize() {
-        assertEquals(11, range11.size());
+        assertEquals(range11.size(), 11);
     }
 
     @Test
@@ -42,10 +42,10 @@ public class TestIntegerRange {
     public void testIterate() {
         int expected = 0;
         for (int actual : range11) {
-            assertEquals(expected, actual);
+            assertEquals(actual, expected);
             expected++;
         }
-        assertEquals(11, expected);
+        assertEquals(expected, 11);
     }
 
     @Test
@@ -53,16 +53,15 @@ public class TestIntegerRange {
         Iterator iterator = range11.iterator();
         for (int i = 0; i < 11; i++) {
             assertTrue(iterator.hasNext());
-            assertEquals(i, (int) (Integer) iterator.next());
+            assertEquals((int) (Integer) iterator.next(), i);
         }
         assertFalse(iterator.hasNext());
     }
 
     @Test
     public void testSubList() {
-        assertEquals(
-            Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-            range11.subList(0, 11));
+        assertEquals(range11.subList(0, 11),
+                     Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
     }
 
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
@@ -78,13 +77,14 @@ public class TestIntegerRange {
     @Test
     public void testWithStart() {
         for (int i = 0; i < 7; i++) {
-            assertEquals(i + 4, (Object) range4_11.get(i));
+            assertEquals((Object) range4_11.get(i),
+                         i + 4);
         }
     }
 
     @Test
     public void testSizeWithStart() {
-        assertEquals(7, range4_11.size());
+        assertEquals(range4_11.size(), 7);
     }
 
     @Test
@@ -100,10 +100,10 @@ public class TestIntegerRange {
     public void testIterateWithStart() {
         int expected = 4;
         for (int actual : range4_11) {
-            assertEquals(expected, actual);
+            assertEquals(actual, expected);
             expected++;
         }
-        assertEquals(11, expected);
+        assertEquals(expected, 11);
     }
 
     @Test(expectedExceptions = IndexOutOfBoundsException.class)
@@ -120,14 +120,14 @@ public class TestIntegerRange {
 
     @Test
     public void testWithStep() {
-        assertEquals(4, (Object) range4_11_3.get(0));
-        assertEquals(7, (Object) range4_11_3.get(1));
-        assertEquals(10, (Object) range4_11_3.get(2));
+        assertEquals((Object) range4_11_3.get(0), 4);
+        assertEquals((Object) range4_11_3.get(1), 7);
+        assertEquals((Object) range4_11_3.get(2), 10);
     }
 
     @Test
     public void testSizeWithStep() {
-        assertEquals(3, (Object) range4_11_3.size());
+        assertEquals((Object) range4_11_3.size(), 3);
     }
 
     @Test
@@ -143,10 +143,10 @@ public class TestIntegerRange {
     public void testIterateWithStep() {
         int expected = 4;
         for (int actual : range4_11_3) {
-            assertEquals(expected, actual);
+            assertEquals(actual, expected);
             expected += 3;
         }
-        assertEquals(13, expected);
+        assertEquals(expected, 13);
     }
 
     @Test
@@ -154,7 +154,7 @@ public class TestIntegerRange {
         Iterator iterator = range4_11_3.iterator();
         for (int i = 4; i < 11; i += 3) {
             assertTrue(iterator.hasNext());
-            assertEquals(i, (int) (Integer) iterator.next());
+            assertEquals((int) (Integer) iterator.next(), i);
         }
         assertFalse(iterator.hasNext());
     }
@@ -171,14 +171,11 @@ public class TestIntegerRange {
 
     @Test
     public void testToString() {
-        assertEquals(
-            "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
-            range11.toString());
-        assertEquals(
-            "[0, 1, 2, 3, ..., 11, 12, 13, 14]",
-            new IntegerRange(15).toString());
-        assertEquals(
-            "[0, 6, 12, 18, 24, 30, 36, 42, 48]",
-            new IntegerRange(0, 50, 6).toString());
+        assertEquals(range11.toString(),
+                     "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]");
+        assertEquals(new IntegerRange(15).toString(),
+                     "[0, 1, 2, 3, ..., 11, 12, 13, 14]");
+        assertEquals(new IntegerRange(0, 50, 6).toString(),
+                     "[0, 6, 12, 18, 24, 30, 36, 42, 48]");
     }
 }

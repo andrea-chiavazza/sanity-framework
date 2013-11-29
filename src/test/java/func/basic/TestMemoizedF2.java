@@ -14,15 +14,15 @@ public class TestMemoizedF2 {
                 return (i1 == null ? 0 : i1) * (i2 == null ? 0 : i2) + 1;
             }
         };
-        memoizedProdPlus1 = new MemoizedF2<Integer,Integer,Integer>(prodPlus1);
+        memoizedProdPlus1 = new MemoizedF2<>(prodPlus1);
     }
 
     @Test
     public void test() {
-        assertEquals(prodPlus1.execute(3, 4),   memoizedProdPlus1.execute(3, 4));
-        assertEquals(prodPlus1.execute(-3, 0),   memoizedProdPlus1.execute(-3, 0));
-        assertEquals(prodPlus1.execute(5, 6),    memoizedProdPlus1.execute(5, 6));
-        assertEquals(prodPlus1.execute(null, 6), memoizedProdPlus1.execute(null, 6));
-        assertEquals(prodPlus1.execute(6, null), memoizedProdPlus1.execute(6, null));
+        assertEquals(memoizedProdPlus1.execute(3, 4), prodPlus1.execute(3, 4));
+        assertEquals(memoizedProdPlus1.execute(-3, 0), prodPlus1.execute(-3, 0));
+        assertEquals(memoizedProdPlus1.execute(5, 6), prodPlus1.execute(5, 6));
+        assertEquals(memoizedProdPlus1.execute(null, 6), prodPlus1.execute(null, 6));
+        assertEquals(memoizedProdPlus1.execute(6, null), prodPlus1.execute(6, null));
     }
 }

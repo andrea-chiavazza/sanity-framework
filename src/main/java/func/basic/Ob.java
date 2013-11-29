@@ -3,9 +3,7 @@ package func.basic;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -127,9 +125,24 @@ public abstract class Ob {
         return true;
     }
 
-    private String formatObject(Object obj) {
+    public static String formatObject(Object obj) {
         if (obj instanceof String) {
             return "\"" + ((String) obj).replace("\"", "\\\"") + "\"";
+        } else if (obj instanceof Character) {
+            return "'" + obj + "'";
+        } else if (obj instanceof Collection) {
+            Collection coll = (Collection) obj;
+            if (coll.isEmpty()) {
+                return "[]";
+            } else {
+                StringBuilder sb = new StringBuilder("[");
+                Iterator iterator = coll.iterator();
+                sb.append(Ob.formatObject(iterator.next()));
+                while (iterator.hasNext()) {
+                    sb.append(", ").append(Ob.formatObject(iterator.next()));
+                }
+                return sb.append(']').toString();
+            }
         } else {
             return String.valueOf(obj);
         }
@@ -153,4 +166,5 @@ public abstract class Ob {
             throw new RuntimeException(e);
         }
     }
+
 }

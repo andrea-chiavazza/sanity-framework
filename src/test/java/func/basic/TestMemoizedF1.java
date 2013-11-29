@@ -15,15 +15,15 @@ public class TestMemoizedF1 {
                 return i == null ? 0 : i * 9;
             }
         };
-        memoizedMul9 = new MemoizedF1<Integer,Integer>(mul9);
+        memoizedMul9 = new MemoizedF1<>(mul9);
     }
 
     @Test
     public void test() {
-        assertEquals(mul9.execute(-1), memoizedMul9.execute(-1));
-        assertEquals(mul9.execute(0), memoizedMul9.execute(0));
-        assertEquals(mul9.execute(4), memoizedMul9.execute(4));
-        assertEquals(mul9.execute(9), memoizedMul9.execute(9));
-        assertEquals(mul9.execute(null), memoizedMul9.execute(null));
+        assertEquals(memoizedMul9.execute(-1), mul9.execute(-1));
+        assertEquals(memoizedMul9.execute(0), mul9.execute(0));
+        assertEquals(memoizedMul9.execute(4), mul9.execute(4));
+        assertEquals(memoizedMul9.execute(9), mul9.execute(9));
+        assertEquals(memoizedMul9.execute(null), mul9.execute(null));
     }
 }

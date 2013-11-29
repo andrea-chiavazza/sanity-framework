@@ -13,7 +13,7 @@ import static org.testng.Assert.assertEquals;
 public class TestDoListComprehension {
     @Test
     public void testArity1() {
-        final List<Character> result = new ArrayList<Character>();
+        final List<Character> result = new ArrayList<>();
         doSeq(
             Arrays.asList('a', 'b', 'c'),
             new F1<Character,Character>() {
@@ -24,14 +24,12 @@ public class TestDoListComprehension {
                 }
             });
 
-        assertEquals(
-                Arrays.asList('A', 'B', 'C'),
-                result);
+        assertEquals(result, Arrays.asList('A', 'B', 'C'));
     }
 
     @Test
     public void testArity2() {
-        final List<V2<Character,Integer>> result = new ArrayList<V2<Character,Integer>>();
+        final List<V2<Character,Integer>> result = new ArrayList<>();
         doSeq(
             Arrays.asList('a', 'b', 'c'),
             Arrays.asList(1, 2, 3, 4),
@@ -44,16 +42,16 @@ public class TestDoListComprehension {
             });
 
         assertEquals(
+            result,
             Arrays.asList(
                 V2.of('a', 1), V2.of('a', 2), V2.of('a', 3), V2.of('a', 4),
                 V2.of('b', 1), V2.of('b', 2), V2.of('b', 3), V2.of('b', 4),
-                V2.of('c', 1), V2.of('c', 2), V2.of('c', 3), V2.of('c', 4)),
-            result);
+                V2.of('c', 1), V2.of('c', 2), V2.of('c', 3), V2.of('c', 4)));
     }
 
     @Test
     public void testArity3() {
-        final List<V3<Character,Integer,Double>> result = new ArrayList<V3<Character,Integer,Double>>();
+        final List<V3<Character,Integer,Double>> result = new ArrayList<>();
         doSeq(
             Arrays.asList('a', 'b'),
             Arrays.asList(2, 3),
@@ -67,9 +65,9 @@ public class TestDoListComprehension {
             });
 
         assertEquals(
+            result,
             Arrays.asList(
                 V3.of('a', 2, 1.1), V3.of('a', 2, 4.4), V3.of('a', 3, 1.1), V3.of('a', 3, 4.4),
-                V3.of('b', 2, 1.1), V3.of('b', 2, 4.4), V3.of('b', 3, 1.1), V3.of('b', 3, 4.4)),
-            result);
+                V3.of('b', 2, 1.1), V3.of('b', 2, 4.4), V3.of('b', 3, 1.1), V3.of('b', 3, 4.4)));
     }
 }

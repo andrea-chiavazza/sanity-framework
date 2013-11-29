@@ -16,6 +16,14 @@ public class V3<T,U,V> extends Ob implements F3<T,U,V,V3> {
     }
 
     @Override
+    public String toString() {
+        return "V3[" +
+            Ob.formatObject(t) + ", " +
+            Ob.formatObject(u) + ", " +
+            Ob.formatObject(v) + ']';
+    }
+
+    @Override
     public V3 execute(T t, U u, V v) {
         return new V3<>(t, u, v);
     }

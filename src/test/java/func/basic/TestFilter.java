@@ -1,6 +1,5 @@
 package func.basic;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.*;
@@ -22,84 +21,64 @@ public class TestFilter {
 
     @Test
     public void testFilter1() {
-        Assert.assertEquals(
-            Collections.<Integer>emptyList(),
-            Filter.filter(
-                predOdd,
-                Arrays.asList(22)));
-        assertEquals(
-            Arrays.asList(5),
-            Filter.filter(
-                predOdd,
-                Arrays.asList(5)));
+        assertEquals(Filter.filter(predOdd,
+                                   Arrays.asList(22)),
+                     Collections.<Integer>emptyList());
+        assertEquals(Filter.filter(predOdd,
+                                   Arrays.asList(5)),
+                     Arrays.asList(5));
     }
 
     @Test
     public void testPFilter1() {
-        assertEquals(
-            Collections.<Integer>emptyList(),
-            Filter.pfilter(
-                predOdd,
-                Arrays.asList(22)));
-        assertEquals(
-            Arrays.asList(5),
-            Filter.pfilter(
-                predOdd,
-                Arrays.asList(5)));
+        assertEquals(Filter.pfilter(predOdd,
+                                    Arrays.asList(22)),
+                     Collections.<Integer>emptyList());
+        assertEquals(Filter.pfilter(predOdd,
+                                    Arrays.asList(5)),
+                     Arrays.asList(5));
     }
 
     @Test
     public void testFilter2() {
-        assertEquals(
-            Arrays.asList(13),
-            Filter.filter(
-                predOdd,
-                Arrays.asList(13, 22)));
+        assertEquals(Filter.filter(predOdd,
+                                   Arrays.asList(13, 22)),
+                     Arrays.asList(13));
     }
 
     @Test
     public void testPFilter2() {
-        assertEquals(
-            Arrays.asList(13),
-            Filter.pfilter(
-                predOdd,
-                Arrays.asList(13, 22)));
+        assertEquals(Filter.pfilter(predOdd,
+                                    Arrays.asList(13, 22)),
+                     Arrays.asList(13));
     }
 
     @Test
     public void testFilter4() {
-        assertEquals(
-            Arrays.asList(13, 33),
-            filter(
-                predOdd,
-                Arrays.asList(6, 13, 22, 33)));
+        assertEquals(filter(predOdd,
+                            Arrays.asList(6, 13, 22, 33)),
+                     Arrays.asList(13, 33));
     }
 
     @Test
     public void testPFilter4() {
-        assertEquals(
-            Arrays.asList(13, 33),
-            pfilter(
-                predOdd,
-                Arrays.asList(6, 13, 22, 33)));
+        assertEquals(pfilter(predOdd,
+                             Arrays.asList(6, 13, 22, 33)),
+                     Arrays.asList(13, 33));
     }
 
     @Test
     public void testFilter7() {
-        assertEquals(
-            Arrays.asList(9, 27, 45, 63),
-            filter(
-                predOdd,
-                Arrays.asList(9, 18, 27, 36, 45, 54, 63)));
+        assertEquals(filter(predOdd,
+                            Arrays.asList(9, 18, 27, 36, 45, 54, 63)),
+                     Arrays.asList(9, 27, 45, 63));
     }
 
     @Test
     public void testPFilter7() {
-        assertEquals(
-            Arrays.asList(9, 27, 45, 63),
-            pfilter(
-                predOdd,
-                Arrays.asList(9, 18, 27, 36, 45, 54, 63)));
+        assertEquals(pfilter(predOdd,
+                             Arrays.asList(9, 18, 27, 36, 45, 54, 63)),
+                     Arrays.asList(9, 27, 45, 63));
     }
 
     @Test
@@ -117,9 +96,8 @@ public class TestFilter {
             }
         }
 
-        assertEquals(
-            expected,
-            filter(predOdd, coll));
+        assertEquals(filter(predOdd, coll),
+                     expected);
     }
 
     @Test
@@ -137,9 +115,8 @@ public class TestFilter {
             }
         }
 
-        assertEquals(
-            expected,
-            pfilter(predOdd, coll));
+        assertEquals(pfilter(predOdd, coll),
+                     expected);
     }
 
     public void testPerformance() {
