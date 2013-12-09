@@ -19,6 +19,15 @@ import static func.persist.XMLRead.verifyCollection;
 
 public class General {
 
+    private static final FileFilter xmlFilter = new FileFilter() {
+        public boolean accept(File f) {
+            return f.isDirectory() || f.getName().endsWith(".xml");
+        }
+
+        public String getDescription() {
+            return "XML file";
+        }
+    };
 
     public static <T> PCollection<T> loadCollection(InputStream is,
                                                     Class<T> cl) {
@@ -66,18 +75,10 @@ public class General {
         }
     }
 
-    public static FileInputStream promptForFileISToOpen(JFrame frame) {
+    public static FileInputStream promptForFileISToOpen(JFrame frame,
+                                                        FileFilter fileFilter) {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(
-            new FileFilter() {
-                public boolean accept(File f) {
-                    return f.getName().endsWith(".xml");
-                }
-
-                public String getDescription() {
-                    return "XML file";
-                }
-            });
+        fileChooser.setFileFilter(fileFilter);
         if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             try {
@@ -94,7 +95,7 @@ public class General {
 
     public static <T> PCollection<T> promptAndLoadCollection(JFrame frame,
                                                              Class<T> cl) {
-        FileInputStream fis = promptForFileISToOpen(frame);
+        FileInputStream fis = promptForFileISToOpen(frame, xmlFilter);
         if (fis != null) {
             return loadCollection(fis, cl);
         } else {
