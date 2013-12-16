@@ -148,7 +148,7 @@ public class XMLRead {
                             childCounter++;
                         }
                         if (childCounter < childNodes.getLength() &&
-                                childNodes.item(childCounter).getNodeType() != Node.ELEMENT_NODE) {
+                                childNodes.item(childCounter).getNodeType() == Node.ELEMENT_NODE) {
                             values.add(nodeToValue(childNodes.item(childCounter)));
                             childCounter++;
                         }

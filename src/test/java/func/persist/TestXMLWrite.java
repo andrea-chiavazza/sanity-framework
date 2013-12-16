@@ -156,17 +156,17 @@ public class TestXMLWrite {
                 "  </org.pcollections.PVector>\n" +
                 "  <org.pcollections.PMap>\n" +
                 "    <java.lang.String>aa</java.lang.String>\n" +
-                "    <org.pcollections.TreePVector>\n" +
+                "    <org.pcollections.PVector>\n" +
                 "      <java.lang.Long>1134</java.lang.Long>\n" +
                 "      <java.lang.Long>-7171</java.lang.Long>\n" +
                 "      <java.lang.Long>8888</java.lang.Long>\n" +
-                "    </org.pcollections.TreePVector>\n" +
+                "    </org.pcollections.PVector>\n" +
                 "    <java.lang.String>msv1</java.lang.String>\n" +
-                "    <org.pcollections.TreePVector>\n" +
+                "    <org.pcollections.PVector>\n" +
                 "      <java.lang.Long>34</java.lang.Long>\n" +
                 "      <java.lang.Long>10101</java.lang.Long>\n" +
                 "      <java.lang.Long>-9999</java.lang.Long>\n" +
-                "    </org.pcollections.TreePVector>\n" +
+                "    </org.pcollections.PVector>\n" +
                 "  </org.pcollections.PMap>\n" +
                 "  <func.values.NonPrimitives>null</func.values.NonPrimitives>\n" +
                 "  <func.values.Primitives b=\"18\" bool=\"true\" c=\"f\" d=\"0.123\" f=\"0.123\" i=\"305419898\" l=\"81985529789148946\" s=\"4660\" wf=\"0.623\"/>\n" +
@@ -223,17 +223,17 @@ public class TestXMLWrite {
                 "  </org.pcollections.PVector>\n" +
                 "  <org.pcollections.PMap>\n" +
                 "    <java.lang.String>bb</java.lang.String>\n" +
-                "    <org.pcollections.TreePVector>\n" +
+                "    <org.pcollections.PVector>\n" +
                 "      <java.lang.Long>4</java.lang.Long>\n" +
                 "      <java.lang.Long>222</java.lang.Long>\n" +
                 "      <java.lang.Long>290</java.lang.Long>\n" +
-                "    </org.pcollections.TreePVector>\n" +
+                "    </org.pcollections.PVector>\n" +
                 "    <java.lang.String>msv2</java.lang.String>\n" +
-                "    <org.pcollections.TreePVector>\n" +
+                "    <org.pcollections.PVector>\n" +
                 "      <java.lang.Long>3</java.lang.Long>\n" +
                 "      <java.lang.Long>345</java.lang.Long>\n" +
                 "      <java.lang.Long>-90</java.lang.Long>\n" +
-                "    </org.pcollections.TreePVector>\n" +
+                "    </org.pcollections.PVector>\n" +
                 "  </org.pcollections.PMap>\n" +
                 "  <func.values.NonPrimitives bd=\"356735670.4876345786876345321\" bi=\"123934863458934523475345567\" str=\"how are you\"/>\n" +
                 "  <func.values.Primitives b=\"56\" bool=\"false\" c=\"ᄑ\" d=\"0.321\" f=\"0.321\" i=\"643052058\" l=\"3156441774464124263\" s=\"16965\" wf=\"0.821\"/>\n" +
