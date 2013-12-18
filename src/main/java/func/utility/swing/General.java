@@ -75,19 +75,30 @@ public class General {
         }
     }
 
-    public static FileInputStream promptForFileISToOpen(JFrame frame,
-                                                        FileFilter fileFilter) {
+    public static List<FileInputStream> promptForFileISToOpen(JFrame frame,
+                                                              FileFilter fileFilter,
+                                                              boolean multiSelection) {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(multiSelection);
         fileChooser.setFileFilter(fileFilter);
         if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            try {
-                return new FileInputStream(selectedFile);
-            } catch (FileNotFoundException e) {
-                JOptionPane.showMessageDialog(
-                    frame, "Error opening file " + selectedFile.getName());
-                return null;
+            File[] selectedFiles;
+            if (multiSelection) {
+                selectedFiles = fileChooser.getSelectedFiles();
+            } else {
+                selectedFiles = new File[] {fileChooser.getSelectedFile()};
             }
+            List<FileInputStream> fisList = new ArrayList<>();
+            for (File file : selectedFiles) {
+                try {
+                    fisList.add(new FileInputStream(file));
+                } catch (FileNotFoundException e) {
+                    JOptionPane.showMessageDialog(
+                        frame, "Error opening file " + file.getName());
+                    return null;
+                }
+            }
+            return fisList;
         } else {
             return null;
         }
@@ -95,7 +106,7 @@ public class General {
 
     public static <T> PCollection<T> promptAndLoadCollection(JFrame frame,
                                                              Class<T> cl) {
-        FileInputStream fis = promptForFileISToOpen(frame, xmlFilter);
+        FileInputStream fis = promptForFileISToOpen(frame, xmlFilter, false).get(0);
         if (fis != null) {
             return loadCollection(fis, cl);
         } else {
