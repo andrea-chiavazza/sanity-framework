@@ -1,5 +1,7 @@
 package func.utility.swing;
 
+import func.basic.F1;
+import func.basic.MapFunc;
 import func.persist.XMLRead;
 import func.persist.XMLWrite;
 import org.pcollections.PCollection;
@@ -10,16 +12,13 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 import static func.persist.XMLRead.verifyCollection;
 
 public class General {
 
-    private static final FileFilter xmlFilter = new FileFilter() {
+    public static final FileFilter xmlFilter = new FileFilter() {
         public boolean accept(File f) {
             return f.isDirectory() || f.getName().endsWith(".xml");
         }
@@ -29,6 +28,7 @@ public class General {
         }
     };
 
+    // todo: should be moved somewhere else
     public static <T> PCollection<T> loadCollection(InputStream is,
                                                     Class<T> cl) {
         try {
@@ -57,16 +57,6 @@ public class General {
 
     public static File promptForFileToOpen(JFrame frame) {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(
-            new FileFilter() {
-                public boolean accept(File f) {
-                    return f.getName().endsWith(".xml");
-                }
-
-                public String getDescription() {
-                    return "XML file";
-                }
-            });
         if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             return selectedFile;
@@ -75,11 +65,14 @@ public class General {
         }
     }
 
-    public static List<FileInputStream> promptForFileISToOpen(JFrame frame,
-                                                              FileFilter fileFilter,
-                                                              boolean multiSelection) {
+    /** if dir is null the user default directory will be used. */
+    public static List<File> promptForFileToOpen(JFrame frame,
+                                                 FileFilter fileFilter,
+                                                 boolean multiSelection,
+                                                 File dir) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(multiSelection);
+        fileChooser.setCurrentDirectory(dir);
         fileChooser.setFileFilter(fileFilter);
         if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
             File[] selectedFiles;
@@ -88,25 +81,35 @@ public class General {
             } else {
                 selectedFiles = new File[] {fileChooser.getSelectedFile()};
             }
-            List<FileInputStream> fisList = new ArrayList<>();
-            for (File file : selectedFiles) {
-                try {
-                    fisList.add(new FileInputStream(file));
-                } catch (FileNotFoundException e) {
-                    JOptionPane.showMessageDialog(
-                        frame, "Error opening file " + file.getName());
-                    return null;
-                }
-            }
-            return fisList;
+            return Arrays.asList(selectedFiles);
         } else {
             return null;
         }
     }
 
+    /** if dir is null the user default directory will be used. */
+    public static List<FileInputStream> promptForFileISToOpen(final JFrame frame,
+                                                              FileFilter fileFilter,
+                                                              boolean multiSelection,
+                                                              File dir) {
+        return MapFunc.map(
+            new F1<File,FileInputStream>() {
+                public FileInputStream execute(File file) {
+                    try {
+                        return new FileInputStream(file);
+                    } catch (FileNotFoundException e) {
+                        JOptionPane.showMessageDialog(frame, e.getMessage());
+                        return null;
+                    }
+                }
+            },
+            promptForFileToOpen(frame, fileFilter, multiSelection, dir));
+    }
+
     public static <T> PCollection<T> promptAndLoadCollection(JFrame frame,
-                                                             Class<T> cl) {
-        FileInputStream fis = promptForFileISToOpen(frame, xmlFilter, false).get(0);
+                                                             Class<T> cl,
+                                                             File dir) {
+        FileInputStream fis = promptForFileISToOpen(frame, xmlFilter, false, dir).get(0);
         if (fis != null) {
             return loadCollection(fis, cl);
         } else {
@@ -114,17 +117,22 @@ public class General {
         }
     }
 
-    public static <T> void promptAndSaveCollection(JFrame frame,
-                                                   Collection<T> coll) {
-        File selectedFile = promptForFileToOpen(frame);
+    /** Returns the file where it has been saved.
+     /*  if dir is null the user default directory will be used. */
+    public static <T> File promptAndSaveCollection(JFrame frame,
+                                                   Collection<T> coll,
+                                                   File dir) {
         try {
-            if (selectedFile != null) {
-                XMLWrite.valueToXMLWriter(coll, new FileWriter(selectedFile));
+            List<File> selectedFiles = promptForFileToOpen(frame, xmlFilter, false, dir);
+            if (selectedFiles != null) {
+                File file = selectedFiles.get(0);
+                XMLWrite.valueToXMLWriter(coll, new FileWriter(file));
+                return file;
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(frame,
-                                          "Error saving to file " + selectedFile.getName());
+            JOptionPane.showMessageDialog(frame, e.getMessage());
         }
+        return null;
     }
 
 }
