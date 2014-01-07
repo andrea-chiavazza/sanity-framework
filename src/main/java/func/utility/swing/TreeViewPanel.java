@@ -3,7 +3,10 @@ package func.utility.swing;
 import func.basic.F1;
 import func.basic.F2;
 import func.basic.MapFunc;
-import org.pcollections.*;
+import org.pcollections.Empty;
+import org.pcollections.OrderedPSet;
+import org.pcollections.POrderedSet;
+import org.pcollections.PSet;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -129,9 +132,9 @@ public class TreeViewPanel {
     public PSet<?> getSelectedObjects() {
         TreePath[] selectionPaths = tree.getSelectionPaths();
         if (selectionPaths != null) {
-            return HashTreePSet.from(treePathsToObjects(selectionPaths));
+            return OrderedPSet.from(treePathsToObjects(selectionPaths));
         } else {
-            return Empty.set();
+            return Empty.orderedSet();
         }
     }
 
