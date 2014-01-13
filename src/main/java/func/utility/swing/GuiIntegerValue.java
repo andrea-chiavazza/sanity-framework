@@ -28,7 +28,7 @@ public class GuiIntegerValue extends GuiTextValue {
     }
 
     public Long getValue() {
-        String text = getInputWidget().getText();
+        String text = getInputWidget().getText().trim();
         if (text.equals(format(value))) {
             return value;
         } else if ("".equals(text)) {

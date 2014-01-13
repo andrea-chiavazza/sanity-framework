@@ -42,7 +42,7 @@ public class GuiDecimalValue extends GuiTextValue {
     }
 
     public BigDecimal getValue() {
-        String text = getInputWidget().getText();
+        String text = getInputWidget().getText().trim();
         if ("".equals(text)) {
             return null;
         } else if (text.equals(format(value))) {
