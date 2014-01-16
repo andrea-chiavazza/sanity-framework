@@ -75,20 +75,10 @@ public class TreeViewPanel {
         }
         treeSelectionListener = new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
-                Set<?> selectedObjects = getSelectedObjects();
-                if (!selectedObjects.isEmpty()) {
-                    whenSelected.execute(selectedObjects);
-                }
+                whenSelected.execute(getSelectedObjects());
             }
         };
-        tree.addTreeSelectionListener(new TreeSelectionListener() {
-            public void valueChanged(TreeSelectionEvent e) {
-                Set<?> selectedObjects = getSelectedObjects();
-                if (!selectedObjects.isEmpty()) {
-                    whenSelected.execute(selectedObjects);
-                }
-            }
-        });
+        tree.addTreeSelectionListener(treeSelectionListener);
     }
 
     public void setPopupMaker(final F2<Object,Collection<?>,MenuActionMap> popupMaker) {
@@ -111,16 +101,14 @@ public class TreeViewPanel {
                     }
                     if (clickedRow != -1) {
                         Set<?> selectedObjects = getSelectedObjects();
-                        if (!selectedObjects.isEmpty()) {
-                            MenuActionMap menuActions =
-                                popupMaker.execute(clickedObject, selectedObjects);
-                            if (menuActions != null && !menuActions.isEmpty()) {
-                                JPopupMenu popup = new JPopupMenu();
-                                for (Action action : menuActions.values()) {
-                                    popup.add(action);
-                                }
-                                popup.show(tree, x, y);
+                        MenuActionMap menuActions =
+                            popupMaker.execute(clickedObject, selectedObjects);
+                        if (menuActions != null && !menuActions.isEmpty()) {
+                            JPopupMenu popup = new JPopupMenu();
+                            for (Action action : menuActions.values()) {
+                                popup.add(action);
                             }
+                            popup.show(tree, x, y);
                         }
                     }
                 }
