@@ -65,6 +65,22 @@ public class General {
         }
     }
 
+    /** If initialDir is null then the user's default directory will be used.
+     * If the user clicks cancel then null will be returned. */
+    public static File promptForDirectory(String message,
+                                          JFrame frame,
+                                          File initialDir) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle(message);
+        fileChooser.setCurrentDirectory(initialDir);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        } else {
+            return null;
+        }
+    }
+
     /** if dir is null the user default directory will be used. */
     public static List<File> promptForFileToOpen(JFrame frame,
                                                  FileFilter fileFilter,
