@@ -1,5 +1,6 @@
 package func.persist;
 
+import org.pcollections.POrderedSet;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -34,7 +35,9 @@ public class XMLWrite {
             node = document.createElement(cl.getName());
             node.appendChild(document.createTextNode(NULL));
         } else if (obj instanceof Collection) {
-            if (obj instanceof Set) {
+            if (obj instanceof POrderedSet){
+                node = document.createElement("org.pcollections.OrderedPSet");
+            } else if (obj instanceof Set) {
                 node = document.createElement("org.pcollections.PSet");
 //            } else if (obj instanceof List) {
             } else {

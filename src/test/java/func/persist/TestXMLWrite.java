@@ -146,12 +146,12 @@ public class TestXMLWrite {
                 "        <java.lang.String>two</java.lang.String>\n" +
                 "        <java.lang.String>three</java.lang.String>\n" +
                 "      </org.pcollections.PVector>\n" +
-                "      <org.pcollections.PSet>\n" +
+                "      <org.pcollections.OrderedPSet>\n" +
                 "        <java.lang.Integer>22</java.lang.Integer>\n" +
                 "        <java.lang.Integer>-34</java.lang.Integer>\n" +
                 "        <java.lang.Integer>0</java.lang.Integer>\n" +
                 "        <java.lang.Integer>233</java.lang.Integer>\n" +
-                "      </org.pcollections.PSet>\n" +
+                "      </org.pcollections.OrderedPSet>\n" +
                 "    </func.values.WithPCollections>\n" +
                 "  </org.pcollections.PVector>\n" +
                 "  <org.pcollections.PMap>\n" +
@@ -189,10 +189,10 @@ public class TestXMLWrite {
                 "    <java.lang.String>two</java.lang.String>\n" +
                 "    <java.lang.String>three</java.lang.String>\n" +
                 "  </org.pcollections.PVector>\n" +
-                "  <org.pcollections.PSet>\n" +
+                "  <org.pcollections.OrderedPSet>\n" +
                 "    <func.values.Primitives b=\"34\" bool=\"true\" c=\",\" d=\"0.181\" f=\"0.191\" i=\"357848698\" l=\"76866203650223890\" s=\"8500\" wf=\"0.591\"/>\n" +
                 "    <func.values.Primitives b=\"18\" bool=\"false\" c=\"ᠱ\" d=\"0.191\" f=\"0.111\" i=\"573674010\" l=\"3156197678587790695\" s=\"8755\" wf=\"null\"/>\n" +
-                "  </org.pcollections.PSet>\n" +
+                "  </org.pcollections.OrderedPSet>\n" +
                 "  <org.pcollections.PVector>\n" +
                 "    <func.values.WithPCollections no=\"-4\">\n" +
                 "      <org.pcollections.PVector>\n" +
