@@ -8,6 +8,7 @@ public class BigDecimalRange implements List<BigDecimal> {
     private final BigDecimal end;
     private final BigDecimal step;
     private final int size;
+    private final boolean sizeGiven;
 
     public BigDecimalRange(BigDecimal end) {
         this(BigDecimal.ZERO, end, BigDecimal.ONE);
@@ -18,6 +19,8 @@ public class BigDecimalRange implements List<BigDecimal> {
         this(start, end, BigDecimal.ONE);
     }
 
+    /** The first value will be start, the subsequent values will be separated
+     * by the given step except the last one that might be different. */
     public BigDecimalRange(BigDecimal start,
                            BigDecimal end,
                            BigDecimal step) {
@@ -26,7 +29,26 @@ public class BigDecimalRange implements List<BigDecimal> {
         this.step = step;
         this.size = (int) Math.ceil(end.subtract(start).divide(
             step,
-            BigDecimal.ROUND_HALF_EVEN).doubleValue());
+            BigDecimal.ROUND_CEILING).doubleValue());
+        this.sizeGiven = false;
+    }
+
+    /** The first value will be start and the last value will be end.
+     * The elements in between will have a difference of step from one
+     * to the next. */
+    public BigDecimalRange(BigDecimal start,
+                           BigDecimal end,
+                           int stepsNo) {
+        this.start = start;
+        this.end = end;
+        if (stepsNo < 2) {
+            this.step = null; // the step is not used
+        } else {
+            this.step = BigDecimal.valueOf(
+                end.subtract(start).doubleValue() / (stepsNo - 1));
+        }
+        this.size = stepsNo;
+        this.sizeGiven = true;
     }
 
     @Override
@@ -46,25 +68,24 @@ public class BigDecimalRange implements List<BigDecimal> {
         }
         BigDecimal i = (BigDecimal) o;
         return i.compareTo(start) >= 0 &&
-               i.compareTo(end) < 0 &&
-               i.subtract(start).remainder(step).signum() == 0;
+            i.compareTo(end) < 0 &&
+            (i.subtract(start).remainder(step).signum() == 0);
     }
 
     @Override
     public Iterator<BigDecimal> iterator() {
         return new Iterator<BigDecimal>() {
-            private BigDecimal lastReturned = null;
+            private int lastStep = 0;
 
             @Override
             public boolean hasNext() {
-                return lastReturned == null || lastReturned.add(step).compareTo(end) < 0;
+                return lastStep < size;
             }
 
             @Override
             public BigDecimal next() {
                 if (hasNext()) {
-                    lastReturned = lastReturned == null ? start : lastReturned.add(step);
-                    return lastReturned;
+                    return get(lastStep++);
                 } else {
                     throw new NoSuchElementException();
                 }
@@ -146,8 +167,12 @@ public class BigDecimalRange implements List<BigDecimal> {
 
     @Override
     public BigDecimal get(int index) {
-        if ((index < 0 || index >= size())) {
+        if (index < 0 || index >= size()) {
             throw new IndexOutOfBoundsException();
+        } else if (index == 0) {
+            return start;
+        } else if (sizeGiven && index == size - 1) {
+            return end;
         }
         return start.add(step.multiply(BigDecimal.valueOf(index)));
     }
@@ -174,7 +199,7 @@ public class BigDecimalRange implements List<BigDecimal> {
         }
         BigDecimal integer = (BigDecimal) o;
         for (int i = 0; i < size; i++) {
-            if (get(i) == integer) {
+            if (get(i).equals(integer)) {
                 return i;
             }
         }
@@ -188,7 +213,7 @@ public class BigDecimalRange implements List<BigDecimal> {
         }
         BigDecimal integer = (BigDecimal) o;
         for (int i = size - 1; i >= 0; i--) {
-            if (get(i) == integer) {
+            if (get(i).equals(integer)) {
                 return i;
             }
         }
